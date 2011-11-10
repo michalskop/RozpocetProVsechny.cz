@@ -1,0 +1,6 @@
+;$Id$
+name = "DEI"
+description = "Divide et impera"
+dependencies[] = views
+core = 6.x
+php = 5.1

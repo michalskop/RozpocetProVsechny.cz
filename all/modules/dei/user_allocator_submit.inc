@@ -24,6 +24,10 @@ if ($values['form_id'] != 'dei_allocator_form') {
 	  '#title' => 'Příjmení',
 	  '#type' => 'textfield',
 	);
+	$form['key_code'] = array (
+	  '#title' => 'Jedinečný kód (pokud máte)',
+	  '#type' => 'textfield',
+	);
 	$form['sex'] = array (
 	  '#title' => 'Pohlaví',
 	  '#type' => 'radios',

@@ -23,10 +23,11 @@ function dei_allocator () {
 //***********
 function dei_allocator_form(&$form_state) {
 	// get nid
-	if (!is_numeric(arg(1))) {
-	  $arg = explode('/',drupal_lookup_path('source','allocator/'.arg(1)));
+	$arg = arg();
+	if (!is_numeric($arg[1])) {
+	  $arg = explode('/',drupal_lookup_path('source','allocator/'.$arg[1]));
 	} else {
-	  $arg[1] = arg(1);
+	  //$arg[1] = arg(1);
 	}
 	
 	// get title, description, currency
@@ -79,7 +80,7 @@ function dei_allocator_form(&$form_state) {
 		$php_array[$nid]['plid'] = 0;
 	  }
 	}
-	//print_r($php_array);
+	//drupal_set_message("<em>".print_r($php_array,1)."</em>");
 	foreach ($php_array as $pa) {
 	  if ($pa['plid'] > 0) {
 	    $php_array[$pa['plid']]['children'][$pa['mlid']] = $pa['mlid'];
@@ -199,7 +200,7 @@ function _include_js_calc ($currency = '', $new_overall_value = 1, $previous = '
   $js = str_replace('_NEW_OVERALL_VALUE',$new_overall_value,str_replace('_CURRENCY',$currency,file_get_contents(drupal_get_path('module', 'dei') . '/dei_allocator_inc.js')));
  drupal_add_js ($js, 'inline');
  drupal_add_js(drupal_get_path('module', 'dei') . '/../../js/jquery.numberformatter-1.2.js');
- 
+ drupal_set_html_head('<script type="text/javascript" src="https://www.google.com/jsapi"></script><script type="text/javascript"> google.load("visualization", "1", {packages:["treemap"]});</script>');
 }
 
 function dei_allocator_form_submit ($form, &$form_state) {

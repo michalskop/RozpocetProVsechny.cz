@@ -20,7 +20,7 @@ $(document).ready(function() {
   "<span id=\"old-sum-last-label\">K rozdělení celkem: </span> <span id=\"old-sum-last\">_NEW_OVERALL_VALUE</span> _CURRENCY" + 
   "<span id=\"user-sum-last-label\">Váš návrh: </span> <span id=\"user-sum-last\"></span> _CURRENCY" + 
   "<span id=\"diff-last-label\"></span><span id=\"diff-last\"></span> _CURRENCY" + 
-  "<span id=\"chart-last-label\">Vnější kruh je Váš návrh, vnitřní loňský stav</span><div id=\"chart-last\"></div>");
+  "<span id=\"chart-last-label\">Loňský stav:</span><div id=\"chart-first\"></div><span id=\"chart-last-label\">Váš návrh:</span><div id=\"chart-last\"></div>");
   $(".dei-wrapper-0:last > .dei-result-box").addClass(".dei-result-box-last");
 });
 
@@ -61,6 +61,79 @@ $(document).ready(function() {
    });
   });
 });
+
+/*chart 2*/
+function chart2() {
+  //google.load("visualization", "1", {packages:["treemap"]});
+  data0 = new google.visualization.DataTable();
+  data0.addColumn('string', 'Child');
+  data0.addColumn('string', 'Parent');
+  data0.addColumn('number', 'Value');
+  data0.addColumn('number', 'Change');
+  
+  data = new google.visualization.DataTable();
+  data.addColumn('string', 'Child');
+  data.addColumn('string', 'Parent');
+  data.addColumn('number', 'Value');
+  data.addColumn('number', 'Change');
+  
+  j = 0;  
+  $(".dei-wrapper").each(function() {
+    //old value
+    old_value = $(this).children(".dei-old-value").children("div").children("input").parseNumber({format:"#,###", locale:"cz"});
+    $(this).children(".dei-old-value").children("div").children("input").formatNumber({format:"#,###", locale:"cz"});
+    //new value
+    new_value = $(this).children(".dei-user-value").children("div").children("input").parseNumber({format:"#,###", locale:"cz"});
+    $(this).children(".dei-user-value").children("div").children("input").formatNumber({format:"#,###", locale:"cz"});
+    
+    //old, new name, parent
+    old_name = $(this).children(".dei-title").html();
+    if (j>0) {
+      old_parent = $(this).parent().children(".dei-title").html() + ': ' + $(this).parent().children(".dei-old-value").children("div").children("input").parseNumber({format:"#,###", locale:"cz"});
+      $(this).parent().children(".dei-old-value").children("div").children("input").formatNumber({format:"#,###", locale:"cz"});
+      
+      new_parent = $(this).parent().children(".dei-title").html() + ': ' + $(this).parent().children(".dei-user-value").children("div").children("input").parseNumber({format:"#,###", locale:"cz"});
+      $(this).parent().children(".dei-user-value").children("div").children("input").formatNumber({format:"#,###", locale:"cz"});
+    } else {
+      old_parent = null;
+      new_parent = null;
+    }
+    
+    data0.addRows([
+      [old_name + ': ' + old_value,old_parent,parseInt(old_value),j]
+    ]);
+    data.addRows([
+      [old_name + ': ' + new_value,new_parent,parseInt(new_value),j]
+    ]);
+    j++;
+  })
+  
+  v0=new google.visualization.TreeMap(
+    document.getElementById('chart-first')
+        );
+  v0.draw(data0, {maxPostDepth:3});
+
+  v=new google.visualization.TreeMap(
+    document.getElementById('chart-last')
+        );
+  v.draw(data, {maxPostDepth:3});
+
+}
+
+/*draw treemap*/
+function drawVisualization() {
+
+  // Create and draw the visualization.
+  v=new google.visualization.TreeMap(
+          document.getElementById('visualization')
+        );
+  v.draw(data, {maxPostDepth:2});
+  // Pretend update data triggered and processed
+  
+  //google.visualization.events.addListener(v, 'onmouseover', update);
+  
+}
+
 
 /*chart*/
 function chart() {
@@ -131,7 +204,7 @@ function recalculate_sums () {
   });
    $("#user-sum-last").html($(".dei-wrapper-0:last > .dei-user-value > div > input").parseNumber({format:"#,###", locale:"cz"}));
    format_numbers();
-   chart();
+   chart2();
 }
 
 function recalculate_children ($el) {

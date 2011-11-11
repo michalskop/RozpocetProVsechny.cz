@@ -1183,7 +1183,7 @@ padding:0.3em 0.5em;
   color:#0000FF;
 }
 
-#chart-last {
+#chart-last, #chart-first{
   width:350px;
   height:200px;
 }

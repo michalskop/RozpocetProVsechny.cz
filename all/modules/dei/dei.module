@@ -42,6 +42,24 @@ function dei_menu() {
 		'menu_name' => 'DEI',
 		'file' => 'show_result.inc',
 	);
+	$items['rozpocet/%/generate'] = array(
+		//'title callback' => 'dei_allocator_title' ,
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('dei_generate_code_form'),
+		'access callback' => 'user_access',
+		'access arguments' => array('create budget_category content'),
+		'menu_name' => 'DEI',
+		'file' => 'generate_code.inc',
+	);
+	$items['rozpocet/%/codes'] = array(
+		//'title callback' => 'dei_allocator_title' ,
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('dei_generate_code_form'),
+		'access callback' => 'user_access',
+		'access arguments' => array('create budget_category content'),
+		'menu_name' => 'DEI',
+		'file' => 'generate_code.inc',
+	);
 return $items;
 }
 

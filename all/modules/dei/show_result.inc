@@ -25,13 +25,13 @@ SELECT
 	    ORDER BY ctuas.nid
 	";
 	$q = db_query($query,array($arg[1]));
-	$ip_restriction = ($_POST[3] == 1);
+	//$ip_restriction = ($_POST[3] == 1);
 	$code_restriction = ($_POST[4] == 1);
 	if (is_numeric($_POST[2])) $lo_limit = $_POST[2]; else $lo_limit = 'Not set';
 	if (is_numeric($_POST[1])) $hi_limit = $_POST[1]; else $hi_limit = 'Not set';
 	
 	while ($r = db_fetch_array($q)) {
-	  if ($ip_restriction) {
+	  if ($code_restriction) {
 	    //$php_ar[$r['field_ip_hash_value']] = _strip_unuseful(unserialize($r['xml']));
 		if (is_array($pom = _strip_unuseful(unserialize($r['xml'])))) {
 		  $row_ar = array();
@@ -40,8 +40,8 @@ SELECT
 	   if((!empty($row_ar)) and _within_limits(reset($row_ar),$lo_limit,$hi_limit)) {
 	     $php_ar[] = $row_ar;
 		 foreach ($row_ar as $key => $item) {
-		   if (($code_restriction and ($r['field_code_value'] != '')) or (!$code_restriction))
-		     $result_ar[$key][$r['field_ip_hash_value']] = $item;
+		   if ($r['field_code_value'] != '')
+		     $result_ar[$key][$r['field_code_value']] = $item;
 		 }
 		}
 	  } else {
@@ -52,7 +52,6 @@ SELECT
 	   if((!empty($row_ar)) and _within_limits(reset($row_ar),$lo_limit,$hi_limit)) {
 	     $php_ar[] = $row_ar;
 		 foreach ($row_ar as $key => $item) {
-		   if (($code_restriction and ($r['field_code_value'] != '')) or (!$code_restriction))
 		     $result_ar[$key][] = $item;
 		 }
 	   }
@@ -255,7 +254,7 @@ function dei_allocator2_form(&$form_state, $result_ar) {
 				'#suffix' => '</div>',
 			));
 			array_unshift($form, array(
-				'#type' => 'checkbox',
+				'#type' => 'hidden',//'checkbox',
 				'#default_value' => $_SESSION['user_values']['ip_restricted'] ,
 				'#title' => t('Only 1 allocator per each IP'),
 				'#prefix' => '<div id="one-ip-checkbox-wrapper">', // This is our wrapper div.

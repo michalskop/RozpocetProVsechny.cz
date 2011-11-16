@@ -12,20 +12,21 @@ function dei_show_result_form() {
 	
 	// get array
 	$query = "
-	  	SELECT
+SELECT
 		  ctuas.*,
-		  ctuas.field_ip_hash_value,
-		  ctuas.field_xml_value as xml
+		  ctuas.field_xml_value as xml,
+		  ctc.field_code_value
 		FROM
-		  node as n
-		LEFT JOIN
 		  content_type_user_allocator_submit as ctuas
-		ON n.vid = ctuas.vid
-		WHERE ctuas.field_nid_allocator_value = %d
-	    ORDER BY changed
+		LEFT JOIN
+		  content_type_code as ctc
+		ON ctuas.field_key_code_value= ctc.field_code_value AND ctuas.field_nid_allocator_value=ctc.field_nid_value
+		WHERE ctuas.field_nid_allocator_value = 1
+	    ORDER BY ctuas.nid
 	";
 	$q = db_query($query,array($arg[1]));
 	$ip_restriction = ($_POST[3] == 1);
+	$code_restriction = ($_POST[4] == 1);
 	if (is_numeric($_POST[2])) $lo_limit = $_POST[2]; else $lo_limit = 'Not set';
 	if (is_numeric($_POST[1])) $hi_limit = $_POST[1]; else $hi_limit = 'Not set';
 	
@@ -39,7 +40,8 @@ function dei_show_result_form() {
 	   if((!empty($row_ar)) and _within_limits(reset($row_ar),$lo_limit,$hi_limit)) {
 	     $php_ar[] = $row_ar;
 		 foreach ($row_ar as $key => $item) {
-		   $result_ar[$key][$r['field_ip_hash_value']] = $item;
+		   if (($code_restriction and ($r['field_code_value'] != '')) or (!$code_restriction))
+		     $result_ar[$key][$r['field_ip_hash_value']] = $item;
 		 }
 		}
 	  } else {
@@ -50,7 +52,8 @@ function dei_show_result_form() {
 	   if((!empty($row_ar)) and _within_limits(reset($row_ar),$lo_limit,$hi_limit)) {
 	     $php_ar[] = $row_ar;
 		 foreach ($row_ar as $key => $item) {
-		   $result_ar[$key][] = $item;
+		   if (($code_restriction and ($r['field_code_value'] != '')) or (!$code_restriction))
+		     $result_ar[$key][] = $item;
 		 }
 	   }
 	  }
@@ -244,6 +247,13 @@ function dei_allocator2_form(&$form_state, $result_ar) {
 				'#suffix' => '</div>',
 			));
 			//$pom = $_POST[3];
+			array_unshift($form, array(
+				'#type' => 'checkbox',
+				'#default_value' => $_SESSION['user_values']['code_restricted'] ,
+				'#title' => 'Jen s vyplněným jednoznačným kódem',
+				'#prefix' => '<div id="key-code-wrapper">', // This is our wrapper div.
+				'#suffix' => '</div>',
+			));
 			array_unshift($form, array(
 				'#type' => 'checkbox',
 				'#default_value' => $_SESSION['user_values']['ip_restricted'] ,

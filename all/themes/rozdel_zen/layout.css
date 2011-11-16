@@ -44,13 +44,13 @@ background: #fff;
 border-color:#e6e6e6 -moz-use-text-color #e6e6e6 #e6e6e6;
 border-style:solid none solid solid;
 border-width:3px medium 3px 3px;
-height:622px;
+height:652px;
 list-style:none outside none;
 overflow:hidden;
 padding:5px;
 position:fixed;
 right:0px;
-top:150px;
+top:20px;
 width:400px;
 z-index:5;
     }

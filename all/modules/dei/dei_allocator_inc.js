@@ -20,7 +20,7 @@ $(document).ready(function() {
   "<span id=\"old-sum-last-label\">K rozdělení celkem: </span> <span id=\"old-sum-last\">_NEW_OVERALL_VALUE</span> _CURRENCY" + 
   "<span id=\"user-sum-last-label\">Váš návrh: </span> <span id=\"user-sum-last\"></span> _CURRENCY" + 
   "<span id=\"diff-last-label\"></span><span id=\"diff-last\"></span> _CURRENCY" + 
-  "<span id=\"chart-last-label\">Loňský stav:</span><div id=\"chart-first\"></div><span id=\"chart-last-label\">Váš návrh:</span><div id=\"chart-last\"></div><input class='form-submit' type='button' value='Aktualizovat'> ");
+  "<span id=\"chart-last-label\">Obec:</span><div id=\"chart-first\"></div><span id=\"chart-last-label\">Váš návrh:</span><div id=\"chart-last\"></div><input class='form-submit' type='button' value='Aktualizovat'> ");
   $(".dei-wrapper-0:last > .dei-result-box").addClass(".dei-result-box-last");
 });
 
